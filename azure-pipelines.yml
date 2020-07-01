@@ -12,13 +12,43 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@0
-
-- task: NuGetCommand@2
+  displayName: 'Use NuGet 4.4.1'
   inputs:
-    restoreSolution: '**/*.sln'
+    versionSpec: 4.4.1
+  
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(Parameters.restorePkgSolution)'
 
 - task: XamarinAndroid@1
+  displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
   inputs:
     projectFile: '**/*Droid*.csproj'
-    outputDirectory: '$(outputDirectory)'
-    configuration: '$(buildConfiguration)'
+    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+    configuration: '$(BuildConfiguration)'
+
+- task: AndroidSigning@3
+  displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+  inputs:
+    apkFiles: '$(Parameters.appFiles)'
+    apksignerKeystoreFile: cross
+    apksignerKeystorePassword: 123123
+    apksignerKeystoreAlias: cross
+    apksignerKeyPassword: 123123
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
+  condition: succeededOrFailed()
+
+- task: AppCenterDistribute@2
+  displayName: 'Deploy $(build.binariesdirectory)/$(BuildConfiguration)/*.apk to Visual Studio App Center'
+  inputs:
+    serverEndpoint: 'app center connection'
+    appSlug: senkadir/notestome
+    appFile: '$(Parameters.appFiles)'
+    symbolsIncludeParentDirectory: false
+    releaseNotesInput: 'Initial create'
+  condition: succeededOrFailed()
