@@ -31,12 +31,12 @@ steps:
 - task: AndroidSigning@3
   displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
   inputs:
-    apkFiles: 'keystore'
-    apksignerKeystoreFile: notestome
+    apkFiles: '**/*.apk'
+    apksignerKeystoreFile: keystore
     apksignerKeystorePassword: 123123
     apksignerKeystoreAlias: notestome-alias
     apksignerKeyPassword: 12312
-
+    
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
