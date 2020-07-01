@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NotestoMe.Views.NotesPage"
+             BackgroundColor="#1b1b1b">
+    <ContentPage.Content>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Today}" TextColor="#535257" FontAttributes="Bold" FontSize="30" Margin="10,20, 0,10" />
+
+            <Editor Grid.Row="1" Grid.Column="0" Placeholder="New note..." PlaceholderColor="#fff" TextColor="#fff"  MaxLength="100" x:Name="txtNewNote" AutoSize="TextChanges" />
+
+            <Button Grid.Row="1" Grid.Column="1"  Text="Take" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="NewNote" Clicked="NewNote_Clicked" />
+            
+                <!-- Shedule list structure-->
+            <CollectionView ItemsSource="{Binding Notes}"
+                                 Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                 VerticalScrollBarVisibility="Never"
+                                 VerticalOptions="Start">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10, 0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Schedule time-->
+                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Hour}" TextColor="#bfc0c0" FontAttributes="Bold" VerticalOptions="Start" />
+                            
+                            <!-- Card -->
+                            <Frame Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,30,15" BackgroundColor="#363636" Padding="10, 5, 0, 15">
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" TextColor="#535257" FontSize="18" IsVisible="false"/>
+                                    <Label Text="{Binding Description}" TextColor="Silver" FontSize="18"/>
+                                    <!-- Features-->
+                                    <CollectionView ItemsSource="{Binding Tags}"
+                                                             Margin="0,20,0,0"
+                                                             HorizontalScrollBarVisibility="Never"
+                                                             HeightRequest="50"
+                                                             ItemsLayout="HorizontalList"
+                                                    IsVisible="False">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout Margin="0,0,10,0">
+                                                    <Label Text="{Binding Name}" BackgroundColor="{Binding BGColor}" FontAttributes="Bold" TextColor="{Binding TxColor}" Padding="10" HorizontalOptions="Start"/>
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+
+                                </StackLayout>
+                            </Frame>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
