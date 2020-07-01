@@ -32,9 +32,9 @@ steps:
   displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
   inputs:
     apkFiles: '$(Parameters.appFiles)'
-    apksignerKeystoreFile: cross
+    apksignerKeystoreFile: notestome
     apksignerKeystorePassword: 123123
-    apksignerKeystoreAlias: cross
+    apksignerKeystoreAlias: notestome-alias
     apksignerKeyPassword: 123123
 
 - task: PublishBuildArtifacts@1
