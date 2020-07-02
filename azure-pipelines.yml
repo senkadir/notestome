@@ -11,6 +11,8 @@ jobs:
     variables:
       - group: android-pipe-variables
     steps:
+      - script: echo '$(apksignerKeystoreFile)'
+      
       - task: NuGetToolInstaller@0
         displayName: 'Use NuGet 4.4.1'
         inputs:
