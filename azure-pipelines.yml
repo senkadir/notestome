@@ -3,52 +3,60 @@ trigger:
     include:
       - master
 
-pool:
-  vmImage: 'windows-latest'
+jobs:
+  - job: 'droid'
+    displayName: 'droid pipe'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      - group: android-pipe-variables
+    steps:
+      - task: NuGetToolInstaller@0
+        displayName: 'Use NuGet 4.4.1'
+        inputs:
+          versionSpec: 4.4.1
+        
+      - task: NuGetCommand@2
+        displayName: 'NuGet restore'
+        inputs:
+          restoreSolution: '**\*.sln'
 
-variables:
-  - group: android-pipe-variables
+      - task: XamarinAndroid@1
+        displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
+        inputs:
+          projectFile: '**/*Droid*.csproj'
+          outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+          configuration: '$(BuildConfiguration)'
+        condition: succeededOrFailed()
 
-steps:
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.4.1'
-  inputs:
-    versionSpec: 4.4.1
-  
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: '**\*.sln'
+      - task: AndroidSigning@3
+        displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+        inputs:
+          apkFiles: '**/*.apk'
+          apksignerKeystoreFile: '$(apksignerKeystoreFile)'
+          apksignerKeystorePassword: '$(apksignerKeystorePassword)'
+          apksignerKeystoreAlias: '$(apksignerKeystoreAlias)'
+          apksignerKeyPassword: '$(apksignerKeyPassword)'
+          
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: drop'
+        inputs:
+          PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
+        condition: succeededOrFailed()
 
-- task: XamarinAndroid@1
-  displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
-  inputs:
-    projectFile: '**/*Droid*.csproj'
-    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
-    configuration: '$(BuildConfiguration)'
-  condition: succeededOrFailed()
+      - task: AppCenterDistribute@2
+        displayName: 'Deploy $(build.binariesdirectory)/$(BuildConfiguration)/*.apk to Visual Studio App Center'
+        inputs:
+          serverEndpoint: 'app center connection'
+          appSlug: senkadir/notestome
+          appFile: '$(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+          symbolsIncludeParentDirectory: false
+          releaseNotesInput: 'Initial create'
+        condition: succeededOrFailed()
 
-- task: AndroidSigning@3
-  displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
-  inputs:
-    apkFiles: '**/*.apk'
-    apksignerKeystoreFile: '$(apksignerKeystoreFile)'
-    apksignerKeystorePassword: '$(apksignerKeystorePassword)'
-    apksignerKeystoreAlias: '$(apksignerKeystoreAlias)'
-    apksignerKeyPassword: '$(apksignerKeyPassword)'
-    
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
-  condition: succeededOrFailed()
-
-- task: AppCenterDistribute@2
-  displayName: 'Deploy $(build.binariesdirectory)/$(BuildConfiguration)/*.apk to Visual Studio App Center'
-  inputs:
-    serverEndpoint: 'app center connection'
-    appSlug: senkadir/notestome
-    appFile: '$(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
-    symbolsIncludeParentDirectory: false
-    releaseNotesInput: 'Initial create'
-  condition: succeededOrFailed()
+  - job: 'iOS'
+    displayName: 'iOS pipe'
+    pool:
+      vmImage: 'macOS-10.14'
+    variables:
+      - group: iOS-pipe-variables
