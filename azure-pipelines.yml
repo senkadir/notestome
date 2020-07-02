@@ -49,7 +49,7 @@ steps:
   inputs:
     serverEndpoint: 'app center connection'
     appSlug: senkadir/notestome
-    appFile: '$(Parameters.appFiles)'
+    appFile: '$(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
     symbolsIncludeParentDirectory: false
     releaseNotesInput: 'Initial create'
   condition: succeededOrFailed()
