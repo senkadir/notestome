@@ -7,8 +7,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  buildConfiguration: 'Release'
-  outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
+  - group: android-pipe-variables
 
 steps:
 - task: NuGetToolInstaller@0
