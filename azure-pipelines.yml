@@ -2,14 +2,17 @@ trigger:
   branches:
     include:
       - master
-      
-pool:
-  vmImage: 'windows-latest'
 
-variables:
+jobs:
+  - job: 'droid'
+    displayName: 'droid pipe'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
       - group: android-pipe-variables
-
-steps:
+      - name: environment
+        value: droid
+    steps:
       - script: echo '$(apksignerKeystoreFile)'
       
       - task: NuGetToolInstaller@0
@@ -54,3 +57,10 @@ steps:
           symbolsIncludeParentDirectory: false
           releaseNotesInput: 'Initial create'
         condition: succeededOrFailed()
+
+  - job: 'iOS'
+    displayName: 'iOS pipe'
+    pool:
+      vmImage: 'macOS-10.14'
+    variables:
+      - group: iOS-pipe-variables
