@@ -19,7 +19,7 @@ steps:
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
   inputs:
-    restoreSolution: '$(Parameters.restorePkgSolution)'
+    restoreSolution: '**\*.sln'
 
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
@@ -27,6 +27,7 @@ steps:
     projectFile: '**/*Droid*.csproj'
     outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
     configuration: '$(BuildConfiguration)'
+  condition: succeededOrFailed()
 
 - task: AndroidSigning@3
   displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
