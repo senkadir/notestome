@@ -32,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Repos\senkadir\notestome\.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>123123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>notestome-alias</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>123123</AndroidSigningKeyPass>
+    <AndroidUseAapt2>false</AndroidUseAapt2>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +48,11 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Repos\senkadir\notestome\.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>123123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>notestome-alias</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>123123</AndroidSigningKeyPass>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

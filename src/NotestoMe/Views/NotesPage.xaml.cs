@@ -2,9 +2,12 @@
 using NotestoMe.ViewModels;
 using System;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace NotestoMe.Views
 {
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NotesPage : ContentPage
     {
         private NoteViewModel _model;
