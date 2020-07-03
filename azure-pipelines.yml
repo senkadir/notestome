@@ -34,7 +34,7 @@ jobs:
         displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
         inputs:
           apkFiles: '**/*.apk'
-          apksignerKeystoreFile: keystore
+          apksignerKeystoreFile: development.keystore
           apksignerKeystorePassword: '$(apksignerKeystorePassword)'
           apksignerKeystoreAlias: '$(apksignerKeystoreAlias)'
           apksignerKeyPassword: '$(apksignerKeyPassword)'
