@@ -49,7 +49,7 @@ jobs:
         displayName: 'Deploy $(build.binariesdirectory)/$(BuildConfiguration)/*.apk to Visual Studio App Center'
         inputs:
           serverEndpoint: 'app center connection'
-          appSlug: senkadir/notestome
+          appSlug: '$(appSlug)'
           appFile: '$(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
           symbolsIncludeParentDirectory: false
           releaseNotesInput: 'Initial create'
@@ -61,3 +61,8 @@ jobs:
       vmImage: 'macOS-10.14'
     variables:
       - group: iOS-pipe-variables
+    steps:
+    - script: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh 6_4_0
+      displayName: 'Select the Xamarin SDK version'
+      enabled: true
+    
